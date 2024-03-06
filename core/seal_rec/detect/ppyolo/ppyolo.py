@@ -2,11 +2,11 @@ import cv2
 import numpy as np
 import onnxruntime as ort
 from utils.image_utils import get_color_map_list, normalize
-from core.seal_rec.detect_ppyolo.config import seal_detect_args
+from core.seal_rec.detect.ppyolo.config import seal_detect_args
 from utils.bbox_nms import multiclass_nms
 from utils.image_utils import resize_image
-from core.seal_rec.detect_ppyolo.infer import PredictConfig
-from core.seal_rec.detect_ppyolo.preprocess import Compose
+from core.seal_rec.detect.ppyolo.infer import PredictConfig
+from core.seal_rec.detect.ppyolo.preprocess import Compose
 
 
 class PPYolo(object):

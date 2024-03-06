@@ -1,4 +1,4 @@
-from core.seal_rec.detect_ppyolo.ppyolo import PPYolo
+from core.seal_rec.detect.ppyolo.ppyolo import PPYolo
 from libs.base.image_analysis import BaseImageAnalysis
 from core.seal_rec.config import seal_rec_args
 

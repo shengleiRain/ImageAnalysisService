@@ -19,7 +19,7 @@ logger.info("分析模块初始化成功")
 
 
 def call_analysis(image_data):
-    return image_analysis_pipeline.analysis_image(image_data, ["seal_detect"])
+    return image_analysis_pipeline.analysis_image(image_data, ["seal_rec"])
 
 
 if __name__ == "__main__":

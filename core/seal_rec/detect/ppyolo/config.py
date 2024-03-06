@@ -7,8 +7,6 @@ def init_detect_args():
     args = AnalysisArgs()
     args.model_path = os.path.join(project_root, "data/seal/detect/ppyolo_seal_det.onnx")
     args.infer_cfg_path = os.path.join(project_root, "data/seal/detect/infer_cfg.yml")
-    args.score_thresh = 0.8
-    args.nms_thresh = 0.6
     return args
 
 

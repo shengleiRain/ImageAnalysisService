@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import onnxruntime as ort
 from utils.image_utils import get_color_map_list, normalize
-from core.seal_rec.detect.config import seal_detect_args
+from core.seal_rec.detect.picodet.config import seal_detect_args
 from utils.bbox_nms import multiclass_nms
 from utils.image_utils import resize_image
 

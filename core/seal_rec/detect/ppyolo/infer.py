@@ -19,7 +19,7 @@ import numpy as np
 import glob
 from onnxruntime import InferenceSession
 
-from core.seal_rec.detect_ppyolo.preprocess import Compose
+from core.seal_rec.detect.ppyolo.preprocess import Compose
 
 
 def get_test_images(infer_dir, infer_img):
