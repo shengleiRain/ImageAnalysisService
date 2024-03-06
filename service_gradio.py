@@ -6,6 +6,7 @@ from utils.log_init import logger
 from utils.web_utils import is_port_usable
 from conf.service_args import project_root
 from utils.image_utils import read_image_file
+import numpy as np
 
 # 检查端口
 gradio_port = 19192
@@ -18,7 +19,7 @@ logger.info("分析模块初始化成功")
 
 
 def call_analysis(image_data):
-    return image_analysis_pipeline.analysis_image(image_data, ["seal_rec"])
+    return image_analysis_pipeline.analysis_image(image_data, ["seal_detect"])
 
 
 if __name__ == "__main__":
@@ -34,6 +35,5 @@ if __name__ == "__main__":
                 inputs=[image],
                 outputs=output,
                 fn=call_analysis
-
             )
-    gradio_demo.launch(show_error=True, server_name="localhost", server_port=gradio_port)
+    gradio_demo.launch(show_error=True, server_name="0.0.0.0", server_port=gradio_port)

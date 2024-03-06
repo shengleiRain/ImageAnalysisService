@@ -1,4 +1,4 @@
-from core.seal_rec.detect.picodet import PicoDet
+from core.seal_rec.detect_ppyolo.ppyolo import PPYolo
 from core.seal_rec.rec.trocr import OnnxEncoderDecoder
 from libs.base.image_analysis import BaseImageAnalysis
 from core.seal_rec.config import seal_rec_args
@@ -11,7 +11,7 @@ class SealRec(BaseImageAnalysis):
 
     @staticmethod
     def init_analysis_module():
-        seal_det_module = PicoDet()
+        seal_det_module = PPYolo()
         seal_rec_module = OnnxEncoderDecoder()
         return seal_det_module, seal_rec_module
 

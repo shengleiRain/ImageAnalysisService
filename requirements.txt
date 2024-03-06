@@ -1,4 +1,4 @@
-opencv-python
+opencv-python-headless
 onnxruntime
 scipy
 Pyyaml
@@ -7,3 +7,4 @@ pillow
 gradio
 loguru
 tqdm
+gunicorn

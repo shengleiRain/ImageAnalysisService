@@ -3,12 +3,13 @@ ModuleSwitch:
   "analysis_pipeline": True
   "ocr": True
   "seal_rec": True
+  "seal_detect": True
 
 RunArgs:
   cpu_threads: 1
 
 Log:
-  linux_save_root: "/opt/logs"  # linux系统下，日志保存路径
+  linux_save_root: "/tmp/logs"  # linux系统下，日志保存路径
   windows_save_root: "D:/logs"  # windows下，日志保存路径
   retention_time: "14 days"  # 日志保留时长
   level: "INFO"  # 请大写 候选列表为：[DEBUG, INFO, SUCCESS, WARNING, ERROR, CRITICAL]

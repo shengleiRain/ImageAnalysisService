@@ -51,3 +51,31 @@ def online_image_analysis(image: UploadFile = File(), tasks: str = Form(), tasks
     return global_variable.image_analysis_pipeline.analysis_image(image_data,
                                                                   eval(tasks),
                                                                   eval(tasks_args))
+    
+@router.post("/seal_detect",
+             responses=openapi_response,
+             response_model=ResponseItem,
+             response_description=description)
+def online_seal_detect(image: UploadFile = File()):
+    """
+    在线图像分析接口 form-data形式
+    image 示例值：二进制文件 form-data形式
+    """
+    logger.info("pipeline接收到multipart/form-data请求 image：{}, tasks:{}".format(image.filename, "seal_detect"))
+    image_data = read_image_file(image)
+    return global_variable.image_analysis_pipeline.analysis_image(image_data,
+                                                                  ["seal_detect"])
+    
+@router.post("/seal_rec",
+             responses=openapi_response,
+             response_model=ResponseItem,
+             response_description=description)
+def online_seal_rec(image:UploadFile = File()):
+    """
+    在线图像分析接口 form-data形式
+    image 示例值：二进制文件 form-data形式
+    """
+    logger.info("pipeline接收到multipart/form-data请求 image：{}, tasks:{}".format(image.filename, "seal_rec"))
+    image_data = read_image_file(image)
+    return global_variable.image_analysis_pipeline.analysis_image(image_data,
+                                                                  ["seal_rec"])
