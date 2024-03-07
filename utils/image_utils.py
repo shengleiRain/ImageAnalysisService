@@ -2,17 +2,46 @@ import numpy as np
 import cv2
 import os
 import imghdr
-from PIL import Image
+from PIL import Image, ImageDraw
 from io import BytesIO
 from utils.log_init import logger
 from PIL import UnidentifiedImageError
 from utils.web_exception import FileNotExistException, UnsupportedParametersException, UnsupportedFileTypeException
+import re
+import requests
+import PyPDF2
+from pdf2image import convert_from_bytes  
 
 
 def check_image_file(path):
     img_end = {'jpg', 'bmp', 'png', 'jpeg', 'rgb', 'tif', 'tiff', 'gif', 'pdf'}
     return any([path.lower().endswith(e) for e in img_end])
 
+def convert_pdf_to_image(pdf_bytes):
+    images = []
+    print("pdf_bytes:",type(pdf_bytes))
+    pages = convert_from_bytes(pdf_bytes) 
+    for i, page in enumerate(pages): 
+        print("page:", page)
+        images.append(np.array(page))
+        
+    # for i in range(len(reader.pages)):
+    #     page = reader.pages[i]
+    #     # 将PDF页面转换为PIL图像对象
+    #     img = Image.open(BytesIO(page.extract_text().encode()))
+    #     print("img: ", img)
+    #     # # 获取PDF页的尺寸
+    #     # page_size = page.mediabox
+    #     # # 创建空白的Pillow Image对象
+    #     # img = Image.new('RGB', (int(page_size.width), int(page_size.height)), 'white')
+    #     # # 将PDF页渲染到Pillow Image对象中
+    #     # img_draw = ImageDraw.Draw(img)
+    #     # img_draw.rectangle((0, 0, img.size[0], img.size[1]), fill='white')
+    #     # img_draw_img = ImageDraw.Draw(img)
+    #     # img_draw_img.draw(page, (0, 0))
+    #     images.append(np.array(img))
+    return images
+    
 
 def read_image_file(image):
     """
@@ -21,7 +50,47 @@ def read_image_file(image):
     # 本地文件检查
     if isinstance(image, str):
         if not os.path.isfile(image):
+            raise FileNotExistException(image)    
+    # form_data 文件读取
+    elif image.content_type is not None:
+        image = BytesIO(image.file.read())
+    # 其他形式数据
+    else:
+        err_info = "不支持该形式数据"
+        raise UnsupportedParametersException(err_info)
+    #
+    try:
+        image_pillow = Image.open(image).convert("RGB")
+        image_data = np.array(image_pillow)
+    except UnidentifiedImageError:
+        raise UnsupportedFileTypeException("image")
+
+    # 图像数据有效性检查
+    if image_data is None:
+        err_info = "不支持的图像数据"
+        raise UnsupportedParametersException(err_info)
+    return image_data
+
+def read_image_file2(image):
+    """
+    读取图像信息,并根据推理需要转换为三通道图像，支持本地文件与form-data数据
+    """
+    # 本地文件检查
+    if isinstance(image, str):
+        # 检测文件是不是网络文件
+        if re.match(r'^[http|https]', image):
+            response = requests.get(image, stream=True) 
+            image_bytes = response.content
+        elif os.path.isfile(image):
+            with open(image, "rb") as file:  
+                image_bytes = file.read()
+        else:
             raise FileNotExistException(image)
+        
+        if image.endswith(".pdf"):
+            return convert_pdf_to_image(image_bytes)
+        else:
+            image = BytesIO(image_bytes)
     # form_data 文件读取
     elif image.content_type is not None:
         image = BytesIO(image.file.read())

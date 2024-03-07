@@ -5,7 +5,6 @@ from core.analysis_pipeline.analysis_pipeline_args import task_candidate_list
 from utils.log_init import logger
 from utils.web_utils import is_port_usable
 from conf.service_args import project_root
-from utils.image_utils import read_image_file
 import numpy as np
 
 # 检查端口

@@ -8,3 +8,5 @@ gradio
 loguru
 tqdm
 gunicorn
+PyPDF2
+pdf2image

@@ -5,9 +5,10 @@ from fastapi import APIRouter, Query
 from typing import List
 from utils.log_init import logger
 from core.analysis_pipeline.analysis_pipeline_args import task_candidate_list
-from utils.image_utils import read_image_file
+from utils.image_utils import read_image_file2
 from utils.web_exception import openapi_response
 from utils.web_utils import BaseResponseItem
+from typing import Union
 
 
 # 构建本地文件请求体参数
@@ -37,17 +38,17 @@ router = APIRouter(prefix='/image_analysis', tags=['addition'])
              responses=openapi_response,
              response_model=ResponseItem,
              response_description=description)
-def online_image_analysis(image: UploadFile = File(), tasks: str = Form(), tasks_args: str = Form()):
+def online_image_analysis(image: Union[UploadFile,str], tasks: str = Form(), tasks_args: str = Form()):
     """
     在线图像分析接口 form-data形式
     image 示例值：二进制文件 form-data形式
     tasks 示例值：["ocr"] 待分析任务列表，必须是["ocr", "seal_rec"]的子集
     tasks_args 示例值 {“ocr”：{...}} 待分析任务对应的参数 预留字段，非必要
     """
-    logger.info("pipeline接收到multipart/form-data请求 image：{}， tasks：{}，tasks_args：{}".format(image.filename,
+    logger.info("pipeline接收到multipart/form-data请求 image：{}， tasks：{}，tasks_args：{}".format(image,
                                                                                            eval(tasks),
                                                                                            eval(tasks_args)))
-    image_data = read_image_file(image)
+    image_data = read_image_file2(image)
     return global_variable.image_analysis_pipeline.analysis_image(image_data,
                                                                   eval(tasks),
                                                                   eval(tasks_args))
@@ -56,13 +57,13 @@ def online_image_analysis(image: UploadFile = File(), tasks: str = Form(), tasks
              responses=openapi_response,
              response_model=ResponseItem,
              response_description=description)
-def online_seal_detect(image: UploadFile = File()):
+def online_seal_detect(image: Union[UploadFile,str]):
     """
     在线图像分析接口 form-data形式
     image 示例值：二进制文件 form-data形式
     """
-    logger.info("pipeline接收到multipart/form-data请求 image：{}, tasks:{}".format(image.filename, "seal_detect"))
-    image_data = read_image_file(image)
+    logger.info("pipeline接收到multipart/form-data请求 image：{}, tasks:{}".format(image, "seal_detect"))
+    image_data = read_image_file2(image)
     return global_variable.image_analysis_pipeline.analysis_image(image_data,
                                                                   ["seal_detect"])
     
@@ -70,12 +71,12 @@ def online_seal_detect(image: UploadFile = File()):
              responses=openapi_response,
              response_model=ResponseItem,
              response_description=description)
-def online_seal_rec(image:UploadFile = File()):
+def online_seal_rec(image: Union[UploadFile,str]):
     """
     在线图像分析接口 form-data形式
     image 示例值：二进制文件 form-data形式
     """
-    logger.info("pipeline接收到multipart/form-data请求 image：{}, tasks:{}".format(image.filename, "seal_rec"))
-    image_data = read_image_file(image)
+    logger.info("pipeline接收到multipart/form-data请求 image：{}, tasks:{}".format(image, "seal_rec"))
+    image_data = read_image_file2(image)
     return global_variable.image_analysis_pipeline.analysis_image(image_data,
                                                                   ["seal_rec"])

@@ -15,11 +15,16 @@ class SealDetect(BaseImageAnalysis):
 
     def analysis(self, image):
         seal_info = []
-        # 印章检测
-        boxes = self.seal_det_module.detect(image)
-        for i in range(boxes.shape[0]):
-            x_min, y_min, x_max, y_max = int(boxes[i, 2]), int(boxes[i, 3]), int(boxes[i, 4]), int(boxes[i, 5])
-            one_seal_res = {"box": [x_min, y_min, x_max, y_max]}
-            seal_info.append(one_seal_res)
+        if not isinstance(image, list):
+            image = [image]
+        images = image
+        for i in range(len(images)):
+            image = images[i]
+            # 印章检测
+            boxes = self.seal_det_module.detect(image)
+            for i in range(boxes.shape[0]):
+                x_min, y_min, x_max, y_max = int(boxes[i, 2]), int(boxes[i, 3]), int(boxes[i, 4]), int(boxes[i, 5])
+                one_seal_res = {"box": [x_min, y_min, x_max, y_max]}
+                seal_info.append(one_seal_res)
         return seal_info
 
