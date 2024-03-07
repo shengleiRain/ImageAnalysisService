@@ -19,27 +19,9 @@ def check_image_file(path):
 
 def convert_pdf_to_image(pdf_bytes):
     images = []
-    print("pdf_bytes:",type(pdf_bytes))
     pages = convert_from_bytes(pdf_bytes) 
     for i, page in enumerate(pages): 
-        print("page:", page)
         images.append(np.array(page))
-        
-    # for i in range(len(reader.pages)):
-    #     page = reader.pages[i]
-    #     # 将PDF页面转换为PIL图像对象
-    #     img = Image.open(BytesIO(page.extract_text().encode()))
-    #     print("img: ", img)
-    #     # # 获取PDF页的尺寸
-    #     # page_size = page.mediabox
-    #     # # 创建空白的Pillow Image对象
-    #     # img = Image.new('RGB', (int(page_size.width), int(page_size.height)), 'white')
-    #     # # 将PDF页渲染到Pillow Image对象中
-    #     # img_draw = ImageDraw.Draw(img)
-    #     # img_draw.rectangle((0, 0, img.size[0], img.size[1]), fill='white')
-    #     # img_draw_img = ImageDraw.Draw(img)
-    #     # img_draw_img.draw(page, (0, 0))
-    #     images.append(np.array(img))
     return images
     
 
@@ -93,6 +75,8 @@ def read_image_file2(image):
             image = BytesIO(image_bytes)
     # form_data 文件读取
     elif image.content_type is not None:
+        if image.content_type == "application/pdf":
+            return convert_pdf_to_image(image.file.read())
         image = BytesIO(image.file.read())
     # 其他形式数据
     else:
